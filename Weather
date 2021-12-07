@@ -1,73 +1,23 @@
-# Python program to find current
-# weather details of any city
-# using openweathermap api
+'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
  
-# import required modules
-import requests, json
  
-# Enter your API key here
-api_key = "Your_API_Key"
+def weather(city):
+    city = city.replace(" ", "+")
+    res = requests.get(
+        f'https://www.google.com/search?q={city}&oq={city}&aqs=chrome.0.35i39l2j0l4j46j69i60.6128j1j7&sourceid=chrome&ie=UTF-8', headers=headers)
+    print("Searching...\n")
+    soup = BeautifulSoup(res.text, 'html.parser')
+    location = soup.select('#wob_loc')[0].getText().strip()
+    time = soup.select('#wob_dts')[0].getText().strip()
+    info = soup.select('#wob_dc')[0].getText().strip()
+    weather = soup.select('#wob_tm')[0].getText().strip()
+    print(location)
+    print(time)
+    print(info)
+    print(weather+"°C")
  
-# base_url variable to store url
-base_url = "https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&exclude=hourly,daily&appid={API key}
-"
  
-# Give city name
-city_name = input("Enter city name : ")
- 
-# complete_url variable to store
-# complete url address
-complete_url = base_url + "appid=" + api_key + "&q=" + city_name
- 
-# get method of requests module
-# return response object
-response = requests.get(complete_url)
- 
-# json method of response object
-# convert json format data into
-# python format data
-x = response.json()
- 
-# Now x contains list of nested dictionaries
-# Check the value of "cod" key is equal to
-# "404", means city is found otherwise,
-# city is not found
-if x["cod"] != "404":
- 
-    # store the value of "main"
-    # key in variable y
-    y = x["main"]
- 
-    # store the value corresponding
-    # to the "temp" key of y
-    current_temperature = y["temp"]
- 
-    # store the value corresponding
-    # to the "pressure" key of y
-    current_pressure = y["pressure"]
- 
-    # store the value corresponding
-    # to the "humidity" key of y
-    current_humidity = y["humidity"]
- 
-    # store the value of "weather"
-    # key in variable z
-    z = x["weather"]
- 
-    # store the value corresponding
-    # to the "description" key at
-    # the 0th index of z
-    weather_description = z[0]["description"]
- 
-    # print following values
-    print(" Temperature (in kelvin unit) = " +
-                    str(current_temperature) +
-          "\n atmospheric pressure (in hPa unit) = " +
-                    str(current_pressure) +
-          "\n humidity (in percentage) = " +
-                    str(current_humidity) +
-          "\n description = " +
-                    str(weather_description))
- 
-else:
-    print(" City Not Found ")
+city = input("Enter the Name of City ->  ")
+city = city+" weather"
+weather(city)
+print("Have a Nice Day:)")
